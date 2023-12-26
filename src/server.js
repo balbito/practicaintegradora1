@@ -49,24 +49,19 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/", viewRouter);
 
-const messages = [];
+
 
 io.on("connection", (socket) => {
-  console.log("Nuevo usuario conectado");
+  console.log("client connected" + socket.id);
 
   socket.on("message", async (data) => {
     // servidor recibe el mensaje
     console.log(data);
     await messagesDao.createMessage(data)
-    // envia de vuelta a todos, todos los mensajes
-    io.emit("messages", messages);
   });
 
-  socket.on("inicio", (data) => {
-    io.emit("messages", messages);
-    socket.broadcast.emit("connected", data);
-
+  socket.on("disconnect", () => {
+    console.log("Client disconnected" + socket.id);
   })
 
-  socket.emit("messages", messages); 
 });
