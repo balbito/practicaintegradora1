@@ -5,8 +5,13 @@ const router = Router();
 
 router.get("/", async (req, res) => {
     try {
-        const products = await productsDao.getProducts();
+        // Obtengo los parametros de consulta desde req.query
+        const { limit, page, sort, query } = req.query;
+
+        const products = await productsDao.getAllProducts(limit, page, sort, query );
+
         res.json(products);
+
     } catch (error) {
         res.status(400).json(error);
     }

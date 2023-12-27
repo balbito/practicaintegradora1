@@ -55,11 +55,18 @@ router.get("/:cid", async (req, res) => {
 router.post("/:cid/product/:pid", async (req, res) => {
     try{
       let cid = req.params.cid;
-      let pid = req.params.pid
+      let pid = req.params.pid;
+      
+      if(!cid || !pid) {
+        throw new Error("IDs de carrito o producto no proporcionado correctamente en la URL")
+      }
+      console.log("cartId:", cid);
+      console.log("productId:", pid);
       let respuesta = await cartsDao.addProductCart(cid, pid);
+      console.log(cid, pid);
       res.json({
-        respuesta,
         status: "success",
+        respuesta,
       });
     } catch(error) {
        res.json({
@@ -67,6 +74,62 @@ router.post("/:cid/product/:pid", async (req, res) => {
         message: "error agregando el producto al carrito",
        });
     }
+});
+
+router.put("/:cid", async (req, res) => {
+  try {
+    let cid = req.params.cid;
+    let products = req.body;
+    let response = await cartsDao.updateCart(cid, products);
+    res.json({
+      status: "success",
+      response,
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    let cid = req.params.cid;
+    let pid = req.params.pid;
+    let quantity = req.body.quantity;
+    let response = await cartsDao.updateProductQuantity(cid, pid, quantity);
+    res.json({
+      status: "success",
+      response,
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
+});
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+  try {
+    let cid = req.params.cid;
+    let pid = req.params.pid;
+    let response = await cartsDao.deleteProductCart(cid, pid);
+    res.json({
+      status: "success",
+      response,
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
+});
+
+router.delete("/:cid", async (req, res) => {
+  try {
+    let cid = req.params.cid;
+    await cartsDao.deleteCart(cid);
+    res.json({
+      status: "success",
+      message: "Cart deleted",
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
 });
 
 export default router;
