@@ -19,7 +19,7 @@ class CartDao {
         }
     }
 
-    async addProductCart(productId, cartId) {
+    async addProductCart(cartId, productId) {
         //Obtengo el carrito por su ID
         const cart = await cartModel.findById(cartId);
         // console.log("cart:", cart);
@@ -43,7 +43,9 @@ class CartDao {
             producExist.quantity++;
         } else {
             // Si el producto no esta en el carrito lo agrego con una cantidad inicial de 1
-            cart.products.push({ productId: productId, quantity: 1 });
+            const newProduct = { productId: product._id, quantity:1};
+
+            cart.products.push(newProduct);
         }
 
         // Guardo y deuelvo el carrito actualizado
