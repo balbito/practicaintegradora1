@@ -27,23 +27,28 @@ class ProductDao {
     }
   }
   
-  async getProductById(_id) {
-    return await productModel.findById(_id);
+  async getProductById(id) {
+    let product = await productModel.findById(id);
+    if (!product) {
+      throw new Error("Product not found");
+    } else {
+      return product;
+    }
   }
 
   async createProduct(product) {
     return await productModel.create(product);
   }
 
-  async updateProduct(_id, product) {
-    return await productModel.findByIdAndUpdate({_id}, product);
+  async updateProduct(id, product) {
+    return await productModel.findByIdAndUpdate({id}, product);
   }
 
-  async deleteProduct(_id) {
+  async deleteProduct(id) {
 
-    await cartModel.deleteMany({ product: _id });
+    await cartModel.deleteMany({ product: id });
     
-    return await productModel.findByIdAndDelete({_id});
+    return await productModel.findByIdAndDelete({id});
   }
 
 }
