@@ -1,4 +1,37 @@
-<div class="container m-5">
+<div class="container mt-4 mb-4">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card border-none">
+        <img
+          src="https://www.pngall.com/wp-content/uploads/5/Profile-PNG-Images.png"
+          class="w-16 h-16 object-cover rounded-circle img-thumbnail"
+          alt="Imagen de perfil"
+        />
+      </div>
+    </div>
+    <div class="col-md-8 mt-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        {{#if user}}
+          <h1>Bienvenido {{user.name}}</h1>
+        {{else}}
+          <h1>Bienvenido Invitado</h1>
+        {{/if}}
+        <h2>Permisos: {{user.role}}</h2>
+        {{#ifRoleEquals user.role "admin"}}
+          <form action="/productmanager" method="get">
+            <input
+              type="submit"
+              value="Product Manager"
+              class="btn btn-primary"
+            />
+          </form>
+        {{/ifRoleEquals}}
+        <form action="/api/sessions/logout" method="post">
+          <input type="submit" value="Logout" class="btn btn-danger" />
+        </form>
+      </div>
+    </div>
+  </div>
   <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4">
     {{#each products.docs}}
       <div class="col mb-4">
@@ -33,7 +66,7 @@
 </div>
 <div class="position-relative">
   <nav class="position-absolute top-100 start-50 translate-middle">
-    <ul class="pagination">
+    <ul class="pagination mb-4">
       {{#if products.hasPrevPage}}
         <li class="page-item"><a
             class="page-link"

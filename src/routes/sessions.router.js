@@ -23,7 +23,7 @@ router.get("/githubcallback", passport.authenticate('github', { failureRedirect:
     };
 
     req.session.admin = true;
-    res.redirect("/users");
+    res.redirect("/products");
   })
 
 /** Passport Local */
